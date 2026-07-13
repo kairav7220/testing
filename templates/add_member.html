@@ -1,0 +1,99 @@
+{% extends "members.html" %}
+
+{% block title %}Add Member · Library{% endblock %}
+{% block heading %}Add member{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-user-plus"></i> Add member</h2>
+        </div>
+        <a href="{{ url_for('members') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('add_member') }}">
+        <div class="form-group">
+            <label for="name">
+                <i class="fa-solid fa-user"></i> Name
+            </label>
+            <input id="name" type="text" name="name" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="user_id">
+                    <i class="fa-solid fa-id-badge"></i> User ID
+                </label>
+                <input id="user_id" type="text" name="user_id" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fa-solid fa-key"></i> Password
+                </label>
+                <div class="input-with-toggle">
+                    <input id="password" type="password" name="password" required>
+                    <button type="button" class="btn-toggle" id="togglePassword"
+                            aria-label="Show password" title="Show or hide password">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="email">
+                    <i class="fa-solid fa-envelope"></i> Email
+                </label>
+                <input id="email" type="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">
+                    <i class="fa-solid fa-phone"></i> Phone
+                </label>
+                <input id="phone" type="tel" name="phone" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="permanent_address">
+                <i class="fa-solid fa-house"></i> Permanent address
+            </label>
+            <input id="permanent_address" type="text" name="permanent_address" required>
+        </div>
+
+        <div class="form-group">
+            <label for="temporary_address">
+                <i class="fa-solid fa-house"></i> Temporary address
+            </label>
+            <input id="temporary_address" type="text" name="temporary_address" required>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('members') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</main>
+
+<script>
+    (function () {
+        var btn = document.getElementById('togglePassword');
+        var input = document.getElementById('password');
+        if (!btn || !input) return;
+        btn.addEventListener('click', function () {
+            var show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            btn.innerHTML = show
+                ? '<i class="fa-solid fa-eye-slash"></i>'
+                : '<i class="fa-solid fa-eye"></i>';
+        });
+    })();
+</script>
+{% endblock %}
