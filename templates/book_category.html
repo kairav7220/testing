@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>{% block title %}Members · Library{% endblock %}</title>
+    <title>{% block title %}Book Categories · Library{% endblock %}</title>
 </head>
 
 <body>
@@ -19,18 +19,18 @@
         <header class="topbar">
             <div class="brand">
                 <span class="brand-mark" aria-hidden="true">
-                    <i class="fa-solid fa-user-group"></i>
+                    <i class="fa-solid fa-tags"></i>
                 </span>
                 <div>
                     <p class="eyebrow">Library Management</p>
-                    <h1>{% block heading %}Active members{% endblock %}</h1>
+                    <h1>{% block heading %}Active categories{% endblock %}</h1>
                 </div>
             </div>
             <nav class="topnav">
                 <a href="{{ url_for('index') }}" class="btn btn-ghost btn-sm">Users</a>
                 <a href="{{ url_for('books') }}" class="btn btn-ghost btn-sm">Books</a>
                 <a href="{{ url_for('members') }}" class="btn btn-ghost btn-sm">Members</a>
-                <a href="{{ url_for('book_category') }}" class="btn btn-ghost btn-sm">Categories</a>
+                <a href="{{ url_for('book_category') }}" class="btn btn-primary btn-sm">Categories</a>
             </nav>
         </header>
 
@@ -38,9 +38,9 @@
         <main class="panel">
             <div class="panel-head">
                 <div>
-                    <h2><i class="fa-solid fa-table-list"></i> Members</h2>
+                    <h2><i class="fa-solid fa-table-list"></i> Categories</h2>
                 </div>
-                <a href="{{ url_for('add_member') }}" class="btn btn-primary">
+                <a href="{{ url_for('add_book_category') }}" class="btn btn-primary">
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
@@ -48,12 +48,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>User ID</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Permanent Address</th>
-                        <th>Temporary Address</th>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Books</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -61,23 +58,20 @@
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        <td data-label="Name">{{ row.data[2] }}</td>
-                        <td data-label="User ID">{{ row.data[3] }}</td>
-                        <td data-label="Email">{{ row.data[5] }}</td>
-                        <td data-label="Phone">{{ row.data[6] }}</td>
-                        <td data-label="Permanent Address">{{ row.data[8] }}</td>
-                        <td data-label="Temporary Address">{{ row.data[9] }}</td>
+                        <td data-label="Category Name">{{ row.data[2] }}</td>
+                        <td data-label="Description">{{ row.data[3] }}</td>
+                        <td data-label="Books">{{ row.data[4] }}</td>
                         <td data-label="Status">
                             <span class="status active"><i class="fa-solid fa-check"></i> active</span>
                         </td>
                         <td data-label="Actions">
                             <div class="row-actions">
-                                <a href="{{ url_for('edit_member', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
+                                <a href="{{ url_for('edit_book_category', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
                                     title="Edit">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-                                <a href="{{ url_for('delete_member', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
-                                    title="Delete" onclick="return confirm('Delete this member?')">
+                                <a href="{{ url_for('delete_book_category', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
+                                    title="Delete" onclick="return confirm('Delete this category?')">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </div>
@@ -85,9 +79,9 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="8" class="empty-state">
+                        <td colspan="5" class="empty-state">
                             <i class="fa-solid fa-inbox"></i>
-                            <p>No active members found.</p>
+                            <p>No active categories found.</p>
                         </td>
                     </tr>
                     {% endfor %}

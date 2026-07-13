@@ -1,0 +1,46 @@
+{% extends "book_category.html" %}
+
+{% block title %}Add Category · Library{% endblock %}
+{% block heading %}Add category{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-tag"></i> Add category</h2>
+        </div>
+        <a href="{{ url_for('book_category') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('add_book_category') }}">
+        <div class="form-group">
+            <label for="cat_name">
+                <i class="fa-solid fa-tag"></i> Category name
+            </label>
+            <input id="cat_name" type="text" name="cat_name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">
+                <i class="fa-solid fa-align-left"></i> Description
+            </label>
+            <input id="description" type="text" name="description" required>
+        </div>
+
+        <div class="form-group">
+            <label for="book_names">
+                <i class="fa-solid fa-book"></i> Books
+            </label>
+            <input id="book_names" type="text" name="book_names" placeholder="e.g. Dune, Neuromancer, Snow Crash">
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('book_category') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

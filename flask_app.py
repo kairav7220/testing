@@ -21,6 +21,7 @@ gc = gspread.authorize(credentials)
 sheet = gc.open_by_key(os.getenv('GOOGLE_SHEET_ID'))
 user_worksheet = sheet.worksheet('User Table')
 book_worksheet = sheet.worksheet('Book Table')
+book_category_ws = sheet.worksheet('Book Category')
 member_worksheet = sheet.worksheet('Member Table')
 
 app = Flask(__name__)
@@ -122,6 +123,47 @@ def edit_book(row_num):
 def delete_book(row_num):
     book_worksheet.update_acell(f'J{row_num}', '1')
     return redirect(url_for('books'))
+
+# ─── Book Category ───────────────────────────────────────────────
+
+@app.route('/book_cat')
+def book_category():
+    all_values = book_category_ws.get_all_values()
+    headers = all_values[0]
+    rows = []
+    for i, row in enumerate(all_values[1:], start=2):
+        if row[5] == '0':
+            rows.append({'data': row, 'sheet_row': i})
+    return render_template('book_category.html', headers=headers, rows=rows)
+
+@app.route('/book_cat/add', methods=['GET', 'POST'])
+def add_book_category():
+    if request.method == 'POST':
+        cat_name = request.form.get('cat_name')
+        description = request.form.get('description')
+        book_names = request.form.get('book_names')
+        all_values = book_category_ws.get_all_values()
+        next_row = len(all_values) + 1
+        row_data = ['=ROW()', f'="CAT_"&A{next_row}-1', cat_name, description, book_names, '0']
+        book_category_ws.update([row_data], f'A{next_row}:F{next_row}', value_input_option='USER_ENTERED')
+        return redirect(url_for('book_category'))
+    return render_template('add_book_category.html')
+
+@app.route('/book_cat/edit/<int:row_num>', methods=['GET', 'POST'])
+def edit_book_category(row_num):
+    if request.method == 'POST':
+        book_category_ws.update_acell(f'C{row_num}', request.form.get('cat_name'))
+        book_category_ws.update_acell(f'D{row_num}', request.form.get('description'))
+        book_category_ws.update_acell(f'E{row_num}', request.form.get('book_names'))
+        return redirect(url_for('book_category'))
+
+    book_cat_row = book_category_ws.get(f'A{row_num}:F{row_num}')[0]
+    return render_template('edit_book_category.html', book_cat=book_cat_row, row_num=row_num)
+
+@app.route('/book_cat/delete/<int:row_num>')
+def delete_book_category(row_num):
+    book_category_ws.update_acell(f'F{row_num}', '1')
+    return redirect(url_for('book_category'))
 
 # ─── Members ───────────────────────────────────────────────
 
