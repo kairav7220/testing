@@ -84,14 +84,6 @@
         </main>
         {% endblock %}
     </div>
-
-    <script>
-    function deleteUser(rowNum) {
-        if (!confirm('Delete this user? They will be hidden from the active list.')) return;
-        fetch('/delete/' + rowNum, { method: 'DELETE' })
-            .then(function() { location.reload(); });
-    }
-    </script>
 </body>
 
 </html>
