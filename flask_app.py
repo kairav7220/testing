@@ -478,7 +478,13 @@ def book_issue():
         if r[1]:
             employee_names[r[1]] = r[2]
 
-    return render_template('book_issue.html', headers=headers, rows=rows, member_names=member_names, employee_names=employee_names)
+    book_data = book_worksheet.get_all_values()
+    book_names = {}
+    for r in book_data[1:]:
+        if r[1]:
+            book_names[r[1]] = r[2]
+
+    return render_template('book_issue.html', headers=headers, rows=rows, member_names=member_names, employee_names=employee_names, book_names=book_names)
 
 @app.route('/book_issue/add', methods=['GET', 'POST'])
 def add_book_issue():

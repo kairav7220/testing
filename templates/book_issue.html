@@ -58,7 +58,7 @@
                         <th>Transaction ID</th>
                         <th>Date</th>
                         <th>Time</th>
-                        <th>Book ID</th>
+                        <th>Book</th>
                         <th>Issued Date</th>
                         <th>Issued To</th>
                         <th>Received By</th>
@@ -72,7 +72,7 @@
                         <td data-label="Transaction ID">{{ row.data[1] }}</td>
                         <td data-label="Date">{{ row.data[2] }}</td>
                         <td data-label="Time">{{ row.data[3] }}</td>
-                        <td data-label="Book ID">{{ row.data[4] }}</td>
+                        <td data-label="Book">{{ book_names.get(row.data[4], row.data[4]) }}</td>
                         <td data-label="Issued Date">{{ row.data[5] }}</td>
                         <td data-label="Issued To">{{ member_names.get(row.data[6], row.data[6]) }}</td>
                         <td data-label="Received By">{{ employee_names.get(row.data[7], row.data[7]) }}</td>
