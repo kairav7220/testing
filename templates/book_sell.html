@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>{% block title %}Book Categories · Library{% endblock %}</title>
+    <title>{% block title %}Book Sells · Library{% endblock %}</title>
 </head>
 
 <body>
@@ -19,11 +19,11 @@
         <header class="topbar">
             <div class="brand">
                 <span class="brand-mark" aria-hidden="true">
-                    <i class="fa-solid fa-tags"></i>
+                    <i class="fa-solid fa-book-open"></i>
                 </span>
                 <div>
                     <p class="eyebrow">Library Management</p>
-                    <h1>{% block heading %}Book Categories{% endblock %}</h1>
+                    <h1>{% block heading %}Book sells{% endblock %}</h1>
                 </div>
             </div>
             <nav class="topnav">
@@ -31,10 +31,10 @@
                 <a href="{{ url_for('books') }}" class="btn btn-ghost btn-sm">Books</a>
                 <a href="{{ url_for('members') }}" class="btn btn-ghost btn-sm">Members</a>
                 <a href="{{ url_for('employees') }}" class="btn btn-ghost btn-sm">Employees</a>
-                <a href="{{ url_for('book_category') }}" class="btn btn-primary btn-sm">Book Categories</a>
+                <a href="{{ url_for('book_category') }}" class="btn btn-ghost btn-sm">Book Categories</a>
                 <a href="{{ url_for('book_genre') }}" class="btn btn-ghost btn-sm">Book Genres</a>
                 <a href="{{ url_for('subscriptions') }}" class="btn btn-ghost btn-sm">Subscriptions</a>
-                <a href="{{ url_for('book_sell') }}" class="btn btn-ghost btn-sm">Book Sells</a>
+                <a href="{{ url_for('book_sell') }}" class="btn btn-primary btn-sm">Book Sells</a>
                 <a href="{{ url_for('payments') }}" class="btn btn-ghost btn-sm">Payments</a>
             </nav>
         </header>
@@ -43,56 +43,57 @@
         <main class="panel">
             <div class="panel-head">
                 <div>
-                    <h2><i class="fa-solid fa-table-list"></i> Categories</h2>
+                    <h2><i class="fa-solid fa-table-list"></i> Book Sells</h2>
                 </div>
-                <a href="{{ url_for('add_book_category') }}" class="btn btn-primary">
+                <a href="{{ url_for('add_book_sell') }}" class="btn btn-primary">
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
 
+            <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        <th>Category Name</th>
-                        <th>Description</th>
-                        <th>Books</th>
-                        <th>Status</th>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Time</th>
+                        <th>Book ID</th>
+                        <th>Book Name</th>
+                        <th>Price</th>
+                        <th>Member</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        <td data-label="Category Name">{{ row.data[2] }}</td>
-                        <td data-label="Description">{{ row.data[3] }}</td>
-                        <td data-label="Books">{{ row.data[4] }}</td>
-                        <td data-label="Status">
-                            <span class="status active"><i class="fa-solid fa-check"></i> active</span>
-                        </td>
+                        <td data-label="Order ID">{{ row.data[1] }}</td>
+                        <td data-label="Order Date">{{ row.data[2] }}</td>
+                        <td data-label="Time">{{ row.data[3] }}</td>
+                        <td data-label="Book ID">{{ row.data[4] }}</td>
+                        <td data-label="Book Name">{{ row.data[5] }}</td>
+                        <td data-label="Price">{{ row.data[6] }}</td>
+                        <td data-label="Member">{{ member_names.get(row.data[7], row.data[7]) }}</td>
                         <td data-label="Actions">
                             <div class="row-actions">
-                                <a href="{{ url_for('edit_book_category', row_num=row.sheet_row) }}"
-                                    class="btn-icon edit-btn" title="Edit">
+                                <a href="{{ url_for('edit_book_sell', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
+                                    title="Edit">
                                     <i class="fa-solid fa-pencil"></i>
-                                </a>
-                                <a href="{{ url_for('delete_book_category', row_num=row.sheet_row) }}"
-                                    class="btn-icon delete-btn" title="Delete"
-                                    onclick="return confirm('Delete this category?')">
-                                    <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </div>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="5" class="empty-state">
+                        <td colspan="8" class="empty-state">
                             <i class="fa-solid fa-inbox"></i>
-                            <p>No active categories found.</p>
+                            <p>No book sells found.</p>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            </div>
         </main>
         {% endblock %}
     </div>

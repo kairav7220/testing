@@ -28,6 +28,7 @@ member_worksheet = sheet.worksheet('Member Table')
 employee_worksheet = sheet.worksheet('Employee Table')
 subscription_worksheet = sheet.worksheet('Subscription Table')
 payment_worksheet =  sheet.worksheet('Payment Table')
+book_sell_worksheet = sheet.worksheet('Book Sell')
 
 app = Flask(__name__)
 
@@ -407,6 +408,52 @@ def add_payment():
         payment_worksheet.update([row_data], f'A{next_row}:K{next_row}', value_input_option='USER_ENTERED')
         return redirect(url_for('payments'))
     return render_template('add_payment.html')
+
+# ─── Book Sells ───────────────────────────────────────────────
+
+@app.route('/book_sell')
+def book_sell():
+    all_values = book_sell_worksheet.get_all_values()
+    headers = all_values[0]
+    rows = []
+    for i, row in enumerate(all_values[1:], start=2):
+        rows.append({'data': row, 'sheet_row': i})
+
+    member_data = member_worksheet.get_all_values()
+    member_names = {}
+    for r in member_data[1:]:
+        if r[1]:
+            member_names[r[1]] = r[2]
+
+    return render_template('book_sell.html', headers=headers, rows=rows, member_names=member_names)
+
+@app.route('/book_sell/add', methods=['GET', 'POST'])
+def add_book_sell():
+    if request.method == 'POST':
+        order_date = request.form.get('order_date')
+        book_id = request.form.get('book_id')
+        book_name = request.form.get('book_name')
+        book_price = request.form.get('book_price')
+        mem_id = request.form.get('mem_id')
+        all_values = book_sell_worksheet.get_all_values()
+        next_row = len(all_values) + 1
+        row_data = ['=ROW()', f'="ORDER_"&A{next_row}-1', order_date, datetime.now().strftime('%d-%m-%Y %I:%M:%S %p'), book_id, book_name, book_price, mem_id]
+        book_sell_worksheet.update([row_data], f'A{next_row}:H{next_row}', value_input_option='USER_ENTERED')
+        return redirect(url_for('book_sell'))
+    return render_template('add_book_sell.html')
+
+@app.route('/book_sell/edit/<int:row_num>', methods=['GET', 'POST'])
+def edit_book_sell(row_num):
+    if request.method == 'POST':
+        book_sell_worksheet.update_acell(f'C{row_num}', request.form.get('order_date'))
+        book_sell_worksheet.update_acell(f'E{row_num}', request.form.get('book_id'))
+        book_sell_worksheet.update_acell(f'F{row_num}', request.form.get('book_name'))
+        book_sell_worksheet.update_acell(f'G{row_num}', request.form.get('book_price'))
+        book_sell_worksheet.update_acell(f'H{row_num}', request.form.get('mem_id'))
+        return redirect(url_for('book_sell'))
+
+    sell_row = book_sell_worksheet.get(f'A{row_num}:H{row_num}')[0]
+    return render_template('edit_book_sell.html', sell=sell_row, row_num=row_num)
 
 if __name__ == '__main__':
     app.run(debug=True)

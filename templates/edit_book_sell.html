@@ -1,0 +1,71 @@
+{% extends "book_sell.html" %}
+
+{% block title %}Edit Book Sell · Library{% endblock %}
+{% block heading %}Edit book sell{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-pen-to-square"></i> Update book sell</h2>
+        </div>
+        <a href="{{ url_for('book_sell') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('edit_book_sell', row_num=row_num) }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="order_date">
+                    <i class="fa-solid fa-calendar"></i> Order date
+                </label>
+                <input id="order_date" type="text" name="order_date"
+                       value="{{ sell[2] if sell|length > 2 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="book_id">
+                    <i class="fa-solid fa-book"></i> Book ID
+                </label>
+                <input id="book_id" type="text" name="book_id"
+                       value="{{ sell[4] if sell|length > 4 else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="book_name">
+                    <i class="fa-solid fa-book-open"></i> Book name
+                </label>
+                <input id="book_name" type="text" name="book_name"
+                       value="{{ sell[5] if sell|length > 5 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="book_price">
+                    <i class="fa-solid fa-dollar-sign"></i> Price
+                </label>
+                <input id="book_price" type="number" name="book_price"
+                       value="{{ sell[6] if sell|length > 6 else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="mem_id">
+                <i class="fa-solid fa-user"></i> Member ID
+            </label>
+            <input id="mem_id" type="text" name="mem_id"
+                   value="{{ sell[7] if sell|length > 7 else '' }}" required>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('book_sell') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Save changes
+            </button>
+        </div>
+    </form>
+</main>
+{% endblock %}
