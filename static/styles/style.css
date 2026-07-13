@@ -40,6 +40,7 @@ tbody tr:hover { background: #f5f7fa; }
 .row-actions { display: inline-flex; align-items: center; gap: 8px; }
 
 .empty-state { text-align: center; padding: 48px 18px; color: #aab4c2; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .empty-state i { display: block; font-size: 2rem; margin-bottom: 10px; color: #ccd3dc; }
 .empty-state p { margin: 0; }
 
