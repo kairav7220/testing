@@ -1,0 +1,56 @@
+from flask import Flask, jsonify, render_template, request, redirect, url_for
+import gspread
+import os
+import json
+from google.oauth2.service_account import Credentials
+
+scope = [
+    'https://spreadsheets.google.com/feeds',
+    'https://www.googleapis.com/auth/spreadsheets'
+]
+
+creds_json = os.environ.get('GOOGLE_CREDENTIALS')
+if creds_json:
+    creds_dict = json.loads(creds_json)
+    credentials = Credentials.from_service_account_info(creds_dict, scopes=scope)
+else:
+    credentials = Credentials.from_service_account_file('credentials.json', scopes=scope)
+
+gc = gspread.authorize(credentials)
+
+sheet = gc.open_by_key(os.getenv('GOOGLE_SHEET_ID'))
+worksheet = sheet.worksheet('User Table')
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    all_values = worksheet.get_all_values()
+    headers = all_values[0]
+    rows = [row for row in all_values[1:] if row[7] == "0"]
+    return render_template('index.html', headers=headers, rows=rows)
+
+@app.route('/list')
+def get_all_users():
+    all_values = worksheet.get_all_values()
+    return jsonify({'sheet_data': all_values})
+
+@app.route('/update/<int:row_num>', methods=['GET', 'POST'])
+def update_user(row_num):
+    if request.method == 'POST':
+        password = request.form.get('password')
+        phone = request.form.get('phone')
+        worksheet.update_acell(f'E{row_num}', password)
+        worksheet.update_acell(f'G{row_num}', phone)
+        return redirect(url_for('index'))
+
+    user_row = worksheet.get(f'A{row_num}:J{row_num}')[0]
+    return render_template('form.html', user=user_row, row_num=row_num)
+
+@app.route('/delete/<int:row_num>')
+def delete_user(row_num):
+    worksheet.update_acell(f'H{row_num}', 1)
+    return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)

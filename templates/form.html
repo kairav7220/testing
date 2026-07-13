@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User · Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="page page-narrow">
+        <header class="topbar">
+            <div class="brand">
+                <span class="brand-mark" aria-hidden="true">
+                    <i class="fa-solid fa-user-pen"></i>
+                </span>
+                <div>
+                    <p class="eyebrow">Record #{{ row_num }}</p>
+                    <h1>Edit user</h1>
+                </div>
+            </div>
+            <a href="{{ url_for('index') }}" class="btn btn-ghost">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to list
+            </a>
+        </header>
+
+        <section class="summary-card">
+            <div class="summary-avatar" aria-hidden="true">
+                <i class="fa-solid fa-circle-user"></i>
+            </div>
+            <div class="summary-body">
+                <h2>{{ user[3] if user|length > 3 else 'Unknown' }}</h2>
+                <ul class="summary-meta">
+                    <li>
+                        <i class="fa-solid fa-hashtag"></i>
+                        {{ user[2] if user|length > 2 else '—' }}
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-id-badge"></i>
+                        {{ user[5] if user|length > 5 else '—' }}
+                    </li>
+                    <li>
+                        {% set status = user[7] if user|length > 7 else '0' %}
+                        {% if status == "0" %}
+                        <span class="status active"><i class="fa-solid fa-check"></i> Active</span>
+                        {% else %}
+                        <span class="status inactive"><i class="fa-solid fa-ban"></i> Inactive</span>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <main class="panel form-panel">
+            <div class="panel-head">
+                <div>
+                    <h2><i class="fa-solid fa-pen-to-square"></i> Update credentials</h2>
+                    <p class="muted">Saves password (column E) and phone (column G) on this sheet row.</p>
+                </div>
+            </div>
+
+            <form class="edit-form" method="POST" action="{{ url_for('update_user', row_num=row_num) }}">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fa-solid fa-user"></i> Username
+                    </label>
+                    <input id="username" type="text" value="{{ user[3] if user|length > 3 else '' }}" readonly>
+                    <span class="hint">Username is read-only in this form.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fa-solid fa-key"></i> Password
+                    </label>
+                    <div class="input-with-toggle">
+                        <input id="password" type="password" name="password"
+                               value="{{ user[4] if user|length > 4 else '' }}"
+                               autocomplete="new-password" required>
+                        <button type="button" class="btn-toggle" id="togglePassword"
+                                aria-label="Show password" title="Show or hide password">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        <i class="fa-solid fa-phone"></i> Phone
+                    </label>
+                    <input id="phone" type="tel" name="phone"
+                           value="{{ user[6] if user|length > 6 else '' }}"
+                           placeholder="e.g. 9876543210">
+                </div>
+
+                <div class="form-actions">
+                    <a href="{{ url_for('index') }}" class="btn btn-ghost">
+                        <i class="fa-solid fa-xmark"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> Save changes
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <div class="danger-zone">
+            <div>
+                <h3><i class="fa-solid fa-trash-can"></i> Delete this user</h3>
+                <p class="muted">Soft-deletes the user (column H = 1). They disappear from the active list.</p>
+            </div>
+            <a href="{{ url_for('delete_user', row_num=row_num) }}"
+               class="btn btn-danger"
+               onclick="return confirm('Delete this user? They will be hidden from the active list.')">
+                <i class="fa-solid fa-trash-can"></i> Delete
+            </a>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var btn = document.getElementById('togglePassword');
+            var input = document.getElementById('password');
+            if (!btn || !input) return;
+            btn.addEventListener('click', function () {
+                var show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                btn.innerHTML = show
+                    ? '<i class="fa-solid fa-eye-slash"></i>'
+                    : '<i class="fa-solid fa-eye"></i>';
+                btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            });
+        })();
+    </script>
+</body>
+
+</html>

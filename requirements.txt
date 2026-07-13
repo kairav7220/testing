@@ -1,0 +1,9 @@
+pandas
+gspread
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+pydantic
+openpyxl
+python-dotenv
+flask
