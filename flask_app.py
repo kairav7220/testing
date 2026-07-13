@@ -320,7 +320,14 @@ def subscriptions():
     for i, row in enumerate(all_values[1:], start=2):
         if row[10] == '0':
             rows.append({'data': row, 'sheet_row': i})
-    return render_template('subscriptions.html', headers=headers, rows=rows)
+
+    member_data = member_worksheet.get_all_values()
+    member_names = {}
+    for r in member_data[1:]:
+        if r[1]:
+            member_names[r[1]] = r[2]
+
+    return render_template('subscriptions.html', headers=headers, rows=rows, member_names=member_names)
 
 @app.route('/subscriptions/add', methods=['GET', 'POST'])
 def add_subscription():
