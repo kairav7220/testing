@@ -22,6 +22,7 @@ sheet = gc.open_by_key(os.getenv('GOOGLE_SHEET_ID'))
 user_worksheet = sheet.worksheet('User Table')
 book_worksheet = sheet.worksheet('Book Table')
 book_category_ws = sheet.worksheet('Book Category')
+book_genre_ws = sheet.worksheet('Book Genre')
 member_worksheet = sheet.worksheet('Member Table')
 
 app = Flask(__name__)
@@ -164,6 +165,45 @@ def edit_book_category(row_num):
 def delete_book_category(row_num):
     book_category_ws.update_acell(f'F{row_num}', '1')
     return redirect(url_for('book_category'))
+
+# ─── Book Genre ───────────────────────────────────────────────
+
+@app.route('/book_genre')
+def book_genre():
+    all_values = book_genre_ws.get_all_values()
+    headers = all_values[0]
+    rows = []
+    for i, row in enumerate(all_values[1:], start=2):
+        if row[4] == '0':
+            rows.append({'data': row, 'sheet_row': i})
+    return render_template('book_genre.html', headers=headers, rows=rows)
+
+@app.route('/book_genre/add', methods=['GET', 'POST'])
+def add_book_genre():
+    if request.method == 'POST':
+        genre_title = request.form.get('genre_title')
+        book_names = request.form.get('book_names')
+        all_values = book_genre_ws.get_all_values()
+        next_row = len(all_values) + 1
+        row_data = ['=ROW()', f'="GENRE_"&A{next_row}-1', genre_title, book_names, '0']
+        book_genre_ws.update([row_data], f'A{next_row}:E{next_row}', value_input_option='USER_ENTERED')
+        return redirect(url_for('book_genre'))
+    return render_template('add_book_genre.html')
+
+@app.route('/book_genre/edit/<int:row_num>', methods=['GET', 'POST'])
+def edit_book_genre(row_num):
+    if request.method == 'POST':
+        book_genre_ws.update_acell(f'C{row_num}', request.form.get('genre_title'))
+        book_genre_ws.update_acell(f'D{row_num}', request.form.get('book_names'))
+        return redirect(url_for('book_genre'))
+
+    genre_row = book_genre_ws.get(f'A{row_num}:E{row_num}')[0]
+    return render_template('edit_book_genre.html', genre=genre_row, row_num=row_num)
+
+@app.route('/book_genre/delete/<int:row_num>')
+def delete_book_genre(row_num):
+    book_genre_ws.update_acell(f'E{row_num}', '1')
+    return redirect(url_for('book_genre'))
 
 # ─── Members ───────────────────────────────────────────────
 

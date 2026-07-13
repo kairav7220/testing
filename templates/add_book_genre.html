@@ -1,0 +1,39 @@
+{% extends "book_genre.html" %}
+
+{% block title %}Add Genre · Library{% endblock %}
+{% block heading %}Add genre{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-masks-theater"></i> Add genre</h2>
+        </div>
+        <a href="{{ url_for('book_genre') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('add_book_genre') }}">
+        <div class="form-group">
+            <label for="genre_title">
+                <i class="fa-solid fa-masks-theater"></i> Genre title
+            </label>
+            <input id="genre_title" type="text" name="genre_title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="book_names">
+                <i class="fa-solid fa-book"></i> Books
+            </label>
+            <input id="book_names" type="text" name="book_names" placeholder="e.g. Dune, Neuromancer, Foundation">
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('book_genre') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

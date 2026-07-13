@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>{% block title %}Books · Library{% endblock %}</title>
+    <title>{% block title %}Book Genres · Library{% endblock %}</title>
 </head>
 
 <body>
@@ -19,19 +19,19 @@
         <header class="topbar">
             <div class="brand">
                 <span class="brand-mark" aria-hidden="true">
-                    <i class="fa-solid fa-book"></i>
+                    <i class="fa-solid fa-masks-theater"></i>
                 </span>
                 <div>
                     <p class="eyebrow">Library Management</p>
-                    <h1>{% block heading %}Books{% endblock %}</h1>
+                    <h1>{% block heading %}Active genres{% endblock %}</h1>
                 </div>
             </div>
             <nav class="topnav">
                 <a href="{{ url_for('index') }}" class="btn btn-ghost btn-sm">Users</a>
-                <a href="{{ url_for('books') }}" class="btn btn-primary btn-sm">Books</a>
+                <a href="{{ url_for('books') }}" class="btn btn-ghost btn-sm">Books</a>
                 <a href="{{ url_for('members') }}" class="btn btn-ghost btn-sm">Members</a>
                 <a href="{{ url_for('book_category') }}" class="btn btn-ghost btn-sm">Categories</a>
-                <a href="{{ url_for('book_genre') }}" class="btn btn-ghost btn-sm">Genres</a>
+                <a href="{{ url_for('book_genre') }}" class="btn btn-primary btn-sm">Genres</a>
             </nav>
         </header>
 
@@ -39,9 +39,9 @@
         <main class="panel">
             <div class="panel-head">
                 <div>
-                    <h2><i class="fa-solid fa-table-list"></i> Books</h2>
+                    <h2><i class="fa-solid fa-table-list"></i> Genres</h2>
                 </div>
-                <a href="{{ url_for('add_book') }}" class="btn btn-primary">
+                <a href="{{ url_for('add_book_genre') }}" class="btn btn-primary">
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
@@ -49,9 +49,8 @@
             <table>
                 <thead>
                     <tr>
-                        {% for h in headers[2:9] %}
-                        <th>{{ h }}</th>
-                        {% endfor %}
+                        <th>Genre Title</th>
+                        <th>Books</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -59,21 +58,19 @@
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        {% for cell in row.data[2:9] %}
-                        <td data-label="{{ headers[loop.index0 + 2] }}">{{ cell }}</td>
-                        {% endfor %}
+                        <td data-label="Genre Title">{{ row.data[2] }}</td>
+                        <td data-label="Books">{{ row.data[3] }}</td>
                         <td data-label="Status">
                             <span class="status active"><i class="fa-solid fa-check"></i> active</span>
                         </td>
                         <td data-label="Actions">
                             <div class="row-actions">
-                                <a href="{{ url_for('edit_book', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
+                                <a href="{{ url_for('edit_book_genre', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
                                     title="Edit">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-                                <a href="{{ url_for('delete_book', row_num=row.sheet_row) }}"
-                                    class="btn-icon delete-btn" title="Delete"
-                                    onclick="return confirm('Delete this book?')">
+                                <a href="{{ url_for('delete_book_genre', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
+                                    title="Delete" onclick="return confirm('Delete this genre?')">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </div>
@@ -81,9 +78,9 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="9" class="empty-state">
+                        <td colspan="4" class="empty-state">
                             <i class="fa-solid fa-inbox"></i>
-                            <p>No active books found.</p>
+                            <p>No active genres found.</p>
                         </td>
                     </tr>
                     {% endfor %}
