@@ -58,7 +58,7 @@ def add_user():
     return render_template('add_user.html')
 
 @app.route('/update/<int:row_num>', methods=['GET', 'POST'])
-def edit_user(row_num):
+def update_user(row_num):
     if request.method == 'POST':
         password = request.form.get('password')
         phone = request.form.get('phone')
