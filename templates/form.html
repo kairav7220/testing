@@ -20,7 +20,6 @@
                     <i class="fa-solid fa-user-pen"></i>
                 </span>
                 <div>
-                    <p class="eyebrow">Record #{{ row_num }}</p>
                     <h1>Edit user</h1>
                 </div>
             </div>
@@ -48,7 +47,7 @@
                     <li>
                         {% set status = user[7] if user|length > 7 else '0' %}
                         {% if status == "0" %}
-                        <span class="status active"><i class="fa-solid fa-check"></i> Active</span>
+                        <span class="status active"><i class="fa-solid fa-check"></i> active</span>
                         {% else %}
                         <span class="status inactive"><i class="fa-solid fa-ban"></i> Inactive</span>
                         {% endif %}
