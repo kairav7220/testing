@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <title>{% block title %}Users · Library{% endblock %}</title>
 </head>
 
@@ -62,10 +64,10 @@
                                     title="Edit">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-                                <a href="{{ url_for('delete_user', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
-                                    title="Delete" onclick="return confirm('Delete this user? They will be hidden from the active list.')">
+                                <button class="btn-icon delete-btn" onclick="deleteUser({{ row.sheet_row }})"
+                                    title="Delete">
                                     <i class="fa-solid fa-trash-can"></i>
-                                </a>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -82,6 +84,14 @@
         </main>
         {% endblock %}
     </div>
+
+    <script>
+    function deleteUser(rowNum) {
+        if (!confirm('Delete this user? They will be hidden from the active list.')) return;
+        fetch('/delete/' + rowNum, { method: 'DELETE' })
+            .then(function() { location.reload(); });
+    }
+    </script>
 </body>
 
 </html>
