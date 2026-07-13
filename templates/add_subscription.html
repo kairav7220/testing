@@ -1,0 +1,73 @@
+{% extends "subscriptions.html" %}
+
+{% block title %}Add Subscription · Library{% endblock %}
+{% block heading %}Add subscription{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-plus"></i> Add subscription</h2>
+        </div>
+        <a href="{{ url_for('subscriptions') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('add_subscription') }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="plan_mode">
+                    <i class="fa-solid fa-wifi"></i> Plan mode
+                </label>
+                <input id="plan_mode" type="text" name="plan_mode" placeholder="e.g. online, offline" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mem_id">
+                    <i class="fa-solid fa-user"></i> Member ID
+                </label>
+                <input id="mem_id" type="text" name="mem_id" placeholder="e.g. MEM_1" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="mem_subscription_amount">
+                    <i class="fa-solid fa-dollar-sign"></i> Amount
+                </label>
+                <input id="mem_subscription_amount" type="number" name="mem_subscription_amount" required>
+            </div>
+
+            <div class="form-group">
+                <label for="plan_type">
+                    <i class="fa-solid fa-tag"></i> Plan type
+                </label>
+                <input id="plan_type" type="text" name="plan_type" placeholder="e.g. Annual, Monthly" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="plan_start">
+                    <i class="fa-solid fa-calendar"></i> Plan start
+                </label>
+                <input id="plan_start" type="text" name="plan_start" placeholder="e.g. 22-Jan-2026" required>
+            </div>
+
+            <div class="form-group">
+                <label for="plan_end">
+                    <i class="fa-solid fa-calendar-check"></i> Plan end
+                </label>
+                <input id="plan_end" type="text" name="plan_end" placeholder="e.g. 21-Jan-2027" required>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('subscriptions') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

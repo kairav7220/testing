@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for
+from datetime import datetime
 import gspread
 import os
 import json
@@ -25,6 +26,7 @@ book_category_ws = sheet.worksheet('Book Category')
 book_genre_ws = sheet.worksheet('Book Genre')
 member_worksheet = sheet.worksheet('Member Table')
 employee_worksheet = sheet.worksheet('Employee Table')
+subscription_worksheet = sheet.worksheet('Subscription Table')
 
 app = Flask(__name__)
 
@@ -307,6 +309,56 @@ def edit_employee(row_num):
 def delete_employee(row_num):
     employee_worksheet.update_acell(f'M{row_num}', '1')
     return redirect(url_for('employees'))
+
+# ─── Subscriptions ───────────────────────────────────────────────
+
+@app.route('/subscriptions')
+def subscriptions():
+    all_values = subscription_worksheet.get_all_values()
+    headers = all_values[0]
+    rows = []
+    for i, row in enumerate(all_values[1:], start=2):
+        if row[10] == '0':
+            rows.append({'data': row, 'sheet_row': i})
+    return render_template('subscriptions.html', headers=headers, rows=rows)
+
+@app.route('/subscriptions/add', methods=['GET', 'POST'])
+def add_subscription():
+    if request.method == 'POST':
+        plan_mode = request.form.get('plan_mode')
+        mem_id = request.form.get('mem_id')
+        mem_subscription_amount = request.form.get('mem_subscription_amount')
+        plan_type = request.form.get('plan_type')
+        plan_start = request.form.get('plan_start')
+        plan_end = request.form.get('plan_end')
+        all_values = subscription_worksheet.get_all_values()
+        next_row = len(all_values) + 1
+        row_data = ['=ROW()', f'="TXN_"&A{next_row}-1', datetime.now().strftime('%d-%b-%Y'), datetime.now().strftime('%I:%M:%S %p'), plan_mode, mem_id, mem_subscription_amount, plan_type, plan_start, plan_end, '0']
+        subscription_worksheet.update([row_data], f'A{next_row}:K{next_row}', value_input_option='USER_ENTERED')
+        return redirect(url_for('subscriptions'))
+    return render_template('add_subscription.html')
+
+@app.route('/subscriptions/edit/<int:row_num>', methods=['GET', 'POST'])
+def edit_subscription(row_num):
+    if request.method == 'POST':
+        subscription_worksheet.update_acell(f'C{row_num}', request.form.get('transaction_date'))
+        subscription_worksheet.update_acell(f'D{row_num}', request.form.get('timestamp'))
+        subscription_worksheet.update_acell(f'E{row_num}', request.form.get('plan_mode'))
+        subscription_worksheet.update_acell(f'F{row_num}', request.form.get('mem_id'))
+        subscription_worksheet.update_acell(f'G{row_num}', request.form.get('mem_subscription_amount'))
+        subscription_worksheet.update_acell(f'H{row_num}', request.form.get('plan_type'))
+        subscription_worksheet.update_acell(f'I{row_num}', request.form.get('plan_start'))
+        subscription_worksheet.update_acell(f'J{row_num}', request.form.get('plan_end'))
+        subscription_worksheet.update_acell(f'K{row_num}', request.form.get('subscription_status'))
+        return redirect(url_for('subscriptions'))
+
+    sub_row = subscription_worksheet.get(f'A{row_num}:K{row_num}')[0]
+    return render_template('edit_subscription.html', subscription=sub_row, row_num=row_num)
+
+@app.route('/subscriptions/delete/<int:row_num>')
+def delete_subscription(row_num):
+    subscription_worksheet.update_acell(f'K{row_num}', '1')
+    return redirect(url_for('subscriptions'))
 
 if __name__ == '__main__':
     app.run(debug=True)

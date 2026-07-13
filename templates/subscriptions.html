@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>{% block title %}Users · Library{% endblock %}</title>
+    <title>{% block title %}Subscriptions · Library{% endblock %}</title>
 </head>
 
 <body>
@@ -19,21 +19,21 @@
         <header class="topbar">
             <div class="brand">
                 <span class="brand-mark" aria-hidden="true">
-                    <i class="fa-solid fa-users"></i>
+                    <i class="fa-solid fa-calendar-check"></i>
                 </span>
                 <div>
                     <p class="eyebrow">Library Management</p>
-                    <h1>Active users</h1>
+                    <h1>{% block heading %}Active subscriptions{% endblock %}</h1>
                 </div>
             </div>
             <nav class="topnav">
-                <a href="{{ url_for('index') }}" class="btn btn-primary btn-sm">Users</a>
+                <a href="{{ url_for('index') }}" class="btn btn-ghost btn-sm">Users</a>
                 <a href="{{ url_for('books') }}" class="btn btn-ghost btn-sm">Books</a>
                 <a href="{{ url_for('members') }}" class="btn btn-ghost btn-sm">Members</a>
                 <a href="{{ url_for('employees') }}" class="btn btn-ghost btn-sm">Employees</a>
                 <a href="{{ url_for('book_category') }}" class="btn btn-ghost btn-sm">Book Categories</a>
                 <a href="{{ url_for('book_genre') }}" class="btn btn-ghost btn-sm">Book Genres</a>
-                <a href="{{ url_for('subscriptions') }}" class="btn btn-ghost btn-sm">Subscriptions</a>
+                <a href="{{ url_for('subscriptions') }}" class="btn btn-primary btn-sm">Subscriptions</a>
             </nav>
         </header>
 
@@ -41,19 +41,26 @@
         <main class="panel">
             <div class="panel-head">
                 <div>
-                    <h2><i class="fa-solid fa-table-list"></i> Users</h2>
+                    <h2><i class="fa-solid fa-table-list"></i> Subscriptions</h2>
                 </div>
-                <a href="{{ url_for('add_user') }}" class="btn btn-primary">
+                <a href="{{ url_for('add_subscription') }}" class="btn btn-primary">
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
 
+            <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        {% for h in headers[2:7] %}
-                        <th>{{ h }}</th>
-                        {% endfor %}
+                        <th>Transaction ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Plan Mode</th>
+                        <th>Member ID</th>
+                        <th>Amount</th>
+                        <th>Plan Type</th>
+                        <th>Plan Start</th>
+                        <th>Plan End</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -61,20 +68,26 @@
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        {% for cell in row.data[2:7] %}
-                        <td data-label="{{ headers[loop.index0 + 2] }}">{{ cell }}</td>
-                        {% endfor %}
+                        <td data-label="Transaction ID">{{ row.data[1] }}</td>
+                        <td data-label="Date">{{ row.data[2] }}</td>
+                        <td data-label="Time">{{ row.data[3] }}</td>
+                        <td data-label="Plan Mode">{{ row.data[4] }}</td>
+                        <td data-label="Member ID">{{ row.data[5] }}</td>
+                        <td data-label="Amount">{{ row.data[6] }}</td>
+                        <td data-label="Plan Type">{{ row.data[7] }}</td>
+                        <td data-label="Plan Start">{{ row.data[8] }}</td>
+                        <td data-label="Plan End">{{ row.data[9] }}</td>
                         <td data-label="Status">
                             <span class="status active"><i class="fa-solid fa-check"></i> active</span>
                         </td>
                         <td data-label="Actions">
                             <div class="row-actions">
-                                <a href="{{ url_for('update_user', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
+                                <a href="{{ url_for('edit_subscription', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
                                     title="Edit">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-                                <a href="{{ url_for('delete_user', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
-                                    title="Delete" onclick="return confirm('Delete this user? They will be hidden from the active list.')">
+                                <a href="{{ url_for('delete_subscription', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
+                                    title="Delete" onclick="return confirm('Delete this subscription?')">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </div>
@@ -82,14 +95,15 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="7" class="empty-state">
+                        <td colspan="11" class="empty-state">
                             <i class="fa-solid fa-inbox"></i>
-                            <p>No active users found.</p>
+                            <p>No active subscriptions found.</p>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            </div>
         </main>
         {% endblock %}
     </div>

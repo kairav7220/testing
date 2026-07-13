@@ -1,0 +1,109 @@
+{% extends "subscriptions.html" %}
+
+{% block title %}Edit Subscription · Library{% endblock %}
+{% block heading %}Edit subscription{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-pen-to-square"></i> Update subscription</h2>
+        </div>
+        <a href="{{ url_for('subscriptions') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('edit_subscription', row_num=row_num) }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="transaction_date">
+                    <i class="fa-solid fa-calendar"></i> Transaction date
+                </label>
+                <input id="transaction_date" type="text" name="transaction_date"
+                       value="{{ subscription[2] if subscription|length > 2 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="timestamp">
+                    <i class="fa-solid fa-clock"></i> Timestamp
+                </label>
+                <input id="timestamp" type="text" name="timestamp"
+                       value="{{ subscription[3] if subscription|length > 3 else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="plan_mode">
+                    <i class="fa-solid fa-wifi"></i> Plan mode
+                </label>
+                <input id="plan_mode" type="text" name="plan_mode"
+                       value="{{ subscription[4] if subscription|length > 4 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mem_id">
+                    <i class="fa-solid fa-user"></i> Member ID
+                </label>
+                <input id="mem_id" type="text" name="mem_id"
+                       value="{{ subscription[5] if subscription|length > 5 else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="mem_subscription_amount">
+                    <i class="fa-solid fa-dollar-sign"></i> Amount
+                </label>
+                <input id="mem_subscription_amount" type="number" name="mem_subscription_amount"
+                       value="{{ subscription[6] if subscription|length > 6 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="plan_type">
+                    <i class="fa-solid fa-tag"></i> Plan type
+                </label>
+                <input id="plan_type" type="text" name="plan_type"
+                       value="{{ subscription[7] if subscription|length > 7 else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="plan_start">
+                    <i class="fa-solid fa-calendar"></i> Plan start
+                </label>
+                <input id="plan_start" type="text" name="plan_start"
+                       value="{{ subscription[8] if subscription|length > 8 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="plan_end">
+                    <i class="fa-solid fa-calendar-check"></i> Plan end
+                </label>
+                <input id="plan_end" type="text" name="plan_end"
+                       value="{{ subscription[9] if subscription|length > 9 else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="subscription_status">
+                <i class="fa-solid fa-circle-info"></i> Status
+            </label>
+            <select id="subscription_status" name="subscription_status" required>
+                <option value="0" {{ 'selected' if subscription[10] == '0' else '' }}>active</option>
+                <option value="1" {{ 'selected' if subscription[10] == '1' else '' }}>inactive</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('subscriptions') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Save changes
+            </button>
+        </div>
+    </form>
+</main>
+{% endblock %}
