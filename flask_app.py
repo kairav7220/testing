@@ -38,6 +38,21 @@ def get_all_users():
     all_values = worksheet.get_all_values()
     return jsonify({'sheet_data': all_values})
 
+@app.route('/add', methods=['GET', 'POST'])
+def add_user():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        phone = request.form.get('phone')
+        all_values = worksheet.get_all_values()
+        next_row = len(all_values) + 1
+        worksheet.update_acell(f'D{next_row}', username)
+        worksheet.update_acell(f'E{next_row}', password)
+        worksheet.update_acell(f'G{next_row}', phone)
+        worksheet.update_acell(f'H{next_row}', '0')
+        return redirect(url_for('index'))
+    return render_template('add_user.html')
+
 @app.route('/update/<int:row_num>', methods=['GET', 'POST'])
 def update_user(row_num):
     if request.method == 'POST':
