@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <title>Users · Library</title>
+    <title>{% block title %}Users · Library{% endblock %}</title>
 </head>
 
 <body>
@@ -26,6 +26,7 @@
             </div>
         </header>
 
+        {% block content %}
         <main class="panel">
             <div class="panel-head">
                 <div>
@@ -62,7 +63,7 @@
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
                                 <a href="{{ url_for('delete_user', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
-                                    title="Delete" onclick="return confirm('Delete this user?')">
+                                    title="Delete" onclick="return confirm('Delete this user? They will be hidden from the active list.')">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </div>
@@ -79,6 +80,7 @@
                 </tbody>
             </table>
         </main>
+        {% endblock %}
     </div>
 </body>
 
