@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>{% block title %}Books · Library{% endblock %}</title>
+    <title>{% block title %}Employees · Library{% endblock %}</title>
 </head>
 
 <body>
@@ -19,18 +19,18 @@
         <header class="topbar">
             <div class="brand">
                 <span class="brand-mark" aria-hidden="true">
-                    <i class="fa-solid fa-book"></i>
+                    <i class="fa-solid fa-id-badge"></i>
                 </span>
                 <div>
                     <p class="eyebrow">Library Management</p>
-                    <h1>{% block heading %}Books{% endblock %}</h1>
+                    <h1>{% block heading %}Active employees{% endblock %}</h1>
                 </div>
             </div>
             <nav class="topnav">
                 <a href="{{ url_for('index') }}" class="btn btn-ghost btn-sm">Users</a>
-                <a href="{{ url_for('books') }}" class="btn btn-primary btn-sm">Books</a>
+                <a href="{{ url_for('books') }}" class="btn btn-ghost btn-sm">Books</a>
                 <a href="{{ url_for('members') }}" class="btn btn-ghost btn-sm">Members</a>
-                <a href="{{ url_for('employees') }}" class="btn btn-ghost btn-sm">Employees</a>
+                <a href="{{ url_for('employees') }}" class="btn btn-primary btn-sm">Employees</a>
                 <a href="{{ url_for('book_category') }}" class="btn btn-ghost btn-sm">Book Categories</a>
                 <a href="{{ url_for('book_genre') }}" class="btn btn-ghost btn-sm">Book Genres</a>
             </nav>
@@ -40,9 +40,9 @@
         <main class="panel">
             <div class="panel-head">
                 <div>
-                    <h2><i class="fa-solid fa-table-list"></i> Books</h2>
+                    <h2><i class="fa-solid fa-table-list"></i> Employees</h2>
                 </div>
-                <a href="{{ url_for('add_book') }}" class="btn btn-primary">
+                <a href="{{ url_for('add_employee') }}" class="btn btn-primary">
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
@@ -50,9 +50,14 @@
             <table>
                 <thead>
                     <tr>
-                        {% for h in headers[2:9] %}
-                        <th>{{ h }}</th>
-                        {% endfor %}
+                        <th>Name</th>
+                        <th>User ID</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Designation</th>
+                        <th>Salary</th>
+                        <th>Permanent Address</th>
+                        <th>Temporary Address</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -60,21 +65,25 @@
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        {% for cell in row.data[2:9] %}
-                        <td data-label="{{ headers[loop.index0 + 2] }}">{{ cell }}</td>
-                        {% endfor %}
+                        <td data-label="Name">{{ row.data[2] }}</td>
+                        <td data-label="User ID">{{ row.data[3] }}</td>
+                        <td data-label="Email">{{ row.data[5] }}</td>
+                        <td data-label="Phone">{{ row.data[6] }}</td>
+                        <td data-label="Designation">{{ row.data[7] }}</td>
+                        <td data-label="Salary">{{ row.data[8] }}</td>
+                        <td data-label="Permanent Address">{{ row.data[10] }}</td>
+                        <td data-label="Temporary Address">{{ row.data[11] }}</td>
                         <td data-label="Status">
                             <span class="status active"><i class="fa-solid fa-check"></i> active</span>
                         </td>
                         <td data-label="Actions">
                             <div class="row-actions">
-                                <a href="{{ url_for('edit_book', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
+                                <a href="{{ url_for('edit_employee', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
                                     title="Edit">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-                                <a href="{{ url_for('delete_book', row_num=row.sheet_row) }}"
-                                    class="btn-icon delete-btn" title="Delete"
-                                    onclick="return confirm('Delete this book?')">
+                                <a href="{{ url_for('delete_employee', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
+                                    title="Delete" onclick="return confirm('Delete this employee?')">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </div>
@@ -82,9 +91,9 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="9" class="empty-state">
+                        <td colspan="10" class="empty-state">
                             <i class="fa-solid fa-inbox"></i>
-                            <p>No active books found.</p>
+                            <p>No active employees found.</p>
                         </td>
                     </tr>
                     {% endfor %}

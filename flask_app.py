@@ -24,6 +24,7 @@ book_worksheet = sheet.worksheet('Book Table')
 book_category_ws = sheet.worksheet('Book Category')
 book_genre_ws = sheet.worksheet('Book Genre')
 member_worksheet = sheet.worksheet('Member Table')
+employee_worksheet = sheet.worksheet('Employee Table')
 
 app = Flask(__name__)
 
@@ -253,6 +254,59 @@ def edit_member(row_num):
 def delete_member(row_num):
     member_worksheet.update_acell(f'K{row_num}', '1')
     return redirect(url_for('members'))
+
+# ─── Employees ───────────────────────────────────────────────
+
+@app.route('/employees')
+def employees():
+    all_values = employee_worksheet.get_all_values()
+    headers = all_values[0]
+    rows = []
+    for i, row in enumerate(all_values[1:], start=2):
+        if row[12] == '0':
+            rows.append({'data': row, 'sheet_row': i})
+    return render_template('employees.html', headers=headers, rows=rows)
+
+@app.route('/employees/add', methods=['GET', 'POST'])
+def add_employee():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        user_id = request.form.get('user_id')
+        password = request.form.get('password')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        designation = request.form.get('designation')
+        salary = request.form.get('salary')
+        permanent_address = request.form.get('permanent_address')
+        temporary_address = request.form.get('temporary_address')
+        all_values = employee_worksheet.get_all_values()
+        next_row = len(all_values) + 1
+        row_data = ['=ROW()', f'="EMP_"&A{next_row}-1', name, user_id, password, email, phone, designation, salary, '', permanent_address, temporary_address, '0']
+        employee_worksheet.update([row_data], f'A{next_row}:M{next_row}', value_input_option='USER_ENTERED')
+        return redirect(url_for('employees'))
+    return render_template('add_employee.html')
+
+@app.route('/employees/edit/<int:row_num>', methods=['GET', 'POST'])
+def edit_employee(row_num):
+    if request.method == 'POST':
+        employee_worksheet.update_acell(f'C{row_num}', request.form.get('name'))
+        employee_worksheet.update_acell(f'D{row_num}', request.form.get('user_id'))
+        employee_worksheet.update_acell(f'E{row_num}', request.form.get('password'))
+        employee_worksheet.update_acell(f'F{row_num}', request.form.get('email'))
+        employee_worksheet.update_acell(f'G{row_num}', request.form.get('phone'))
+        employee_worksheet.update_acell(f'H{row_num}', request.form.get('designation'))
+        employee_worksheet.update_acell(f'I{row_num}', request.form.get('salary'))
+        employee_worksheet.update_acell(f'K{row_num}', request.form.get('permanent_address'))
+        employee_worksheet.update_acell(f'L{row_num}', request.form.get('temporary_address'))
+        return redirect(url_for('employees'))
+
+    emp_row = employee_worksheet.get(f'A{row_num}:M{row_num}')[0]
+    return render_template('edit_employee.html', employee=emp_row, row_num=row_num)
+
+@app.route('/employees/delete/<int:row_num>')
+def delete_employee(row_num):
+    employee_worksheet.update_acell(f'M{row_num}', '1')
+    return redirect(url_for('employees'))
 
 if __name__ == '__main__':
     app.run(debug=True)

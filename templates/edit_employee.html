@@ -1,0 +1,126 @@
+{% extends "employees.html" %}
+
+{% block title %}Edit Employee · Library{% endblock %}
+{% block heading %}Edit employee{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-pen-to-square"></i> Update employee</h2>
+        </div>
+        <a href="{{ url_for('employees') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('edit_employee', row_num=row_num) }}">
+        <div class="form-group">
+            <label for="name">
+                <i class="fa-solid fa-user"></i> Name
+            </label>
+            <input id="name" type="text" name="name"
+                   value="{{ employee[2] if employee|length > 2 else '' }}" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="user_id">
+                    <i class="fa-solid fa-id-badge"></i> User ID
+                </label>
+                <input id="user_id" type="text" name="user_id"
+                       value="{{ employee[3] if employee|length > 3 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fa-solid fa-key"></i> Password
+                </label>
+                <div class="input-with-toggle">
+                    <input id="password" type="password" name="password"
+                           value="{{ employee[4] if employee|length > 4 else '' }}" required>
+                    <button type="button" class="btn-toggle" id="togglePassword"
+                            aria-label="Show password" title="Show or hide password">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="email">
+                    <i class="fa-solid fa-envelope"></i> Email
+                </label>
+                <input id="email" type="email" name="email"
+                       value="{{ employee[5] if employee|length > 5 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">
+                    <i class="fa-solid fa-phone"></i> Phone
+                </label>
+                <input id="phone" type="tel" name="phone"
+                       value="{{ employee[6] if employee|length > 6 else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="designation">
+                    <i class="fa-solid fa-briefcase"></i> Designation
+                </label>
+                <input id="designation" type="text" name="designation"
+                       value="{{ employee[7] if employee|length > 7 else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="salary">
+                    <i class="fa-solid fa-dollar-sign"></i> Salary
+                </label>
+                <input id="salary" type="number" name="salary"
+                       value="{{ employee[8] if employee|length > 8 else '' }}" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="permanent_address">
+                <i class="fa-solid fa-house"></i> Permanent address
+            </label>
+            <input id="permanent_address" type="text" name="permanent_address"
+                   value="{{ employee[10] if employee|length > 10 else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="temporary_address">
+                <i class="fa-solid fa-house"></i> Temporary address
+            </label>
+            <input id="temporary_address" type="text" name="temporary_address"
+                   value="{{ employee[11] if employee|length > 11 else '' }}" required>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('employees') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Save changes
+            </button>
+        </div>
+    </form>
+</main>
+
+<script>
+    (function () {
+        var btn = document.getElementById('togglePassword');
+        var input = document.getElementById('password');
+        if (!btn || !input) return;
+        btn.addEventListener('click', function () {
+            var show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            btn.innerHTML = show
+                ? '<i class="fa-solid fa-eye-slash"></i>'
+                : '<i class="fa-solid fa-eye"></i>';
+        });
+    })();
+</script>
+{% endblock %}
