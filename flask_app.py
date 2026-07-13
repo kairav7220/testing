@@ -41,11 +41,13 @@ def get_all_users():
 @app.route('/add', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':
+        user_type = request.form.get('user_type')
         username = request.form.get('username')
         password = request.form.get('password')
         phone = request.form.get('phone')
         all_values = worksheet.get_all_values()
         next_row = len(all_values) + 1
+        worksheet.update_acell(f'C{next_row}', user_type)
         worksheet.update_acell(f'D{next_row}', username)
         worksheet.update_acell(f'E{next_row}', password)
         worksheet.update_acell(f'G{next_row}', phone)
