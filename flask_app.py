@@ -27,7 +27,10 @@ app = Flask(__name__)
 def index():
     all_values = worksheet.get_all_values()
     headers = all_values[0]
-    rows = [row for row in all_values[1:] if row[7] == "0"]
+    rows = []
+    for i, row in enumerate(all_values[1:], start=2):
+        if row[7] == '0':
+            rows.append({'data': row, 'sheet_row': i})
     return render_template('index.html', headers=headers, rows=rows)
 
 @app.route('/list')
@@ -49,7 +52,7 @@ def update_user(row_num):
 
 @app.route('/delete/<int:row_num>')
 def delete_user(row_num):
-    worksheet.update_acell(f'H{row_num}', 1)
+    worksheet.update_acell(f'H{row_num}', '1')
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
