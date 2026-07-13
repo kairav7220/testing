@@ -1,0 +1,73 @@
+{% extends "payments.html" %}
+
+{% block title %}Add Payment · Library{% endblock %}
+{% block heading %}Add payment{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-plus"></i> Add payment</h2>
+        </div>
+        <a href="{{ url_for('payments') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('add_payment') }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="payment_amount">
+                    <i class="fa-solid fa-dollar-sign"></i> Amount
+                </label>
+                <input id="payment_amount" type="number" name="payment_amount" required>
+            </div>
+
+            <div class="form-group">
+                <label for="payment_type">
+                    <i class="fa-solid fa-tag"></i> Payment type
+                </label>
+                <input id="payment_type" type="text" name="payment_type" placeholder="e.g. Subscription, Fine" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="payment_mode">
+                    <i class="fa-solid fa-wallet"></i> Payment mode
+                </label>
+                <input id="payment_mode" type="text" name="payment_mode" placeholder="e.g. Cash, Online" required>
+            </div>
+
+            <div class="form-group">
+                <label for="payment_status">
+                    <i class="fa-solid fa-circle-info"></i> Payment status
+                </label>
+                <input id="payment_status" type="text" name="payment_status" placeholder="e.g. Accepted, Pending" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="paid_by">
+                    <i class="fa-solid fa-user"></i> Paid by (Member ID)
+                </label>
+                <input id="paid_by" type="text" name="paid_by" placeholder="e.g. MEM_1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="recieved_by">
+                    <i class="fa-solid fa-user-tie"></i> Received by (Employee ID)
+                </label>
+                <input id="recieved_by" type="text" name="recieved_by" placeholder="e.g. EMP_1" required>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('payments') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

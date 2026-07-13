@@ -27,6 +27,7 @@ book_genre_ws = sheet.worksheet('Book Genre')
 member_worksheet = sheet.worksheet('Member Table')
 employee_worksheet = sheet.worksheet('Employee Table')
 subscription_worksheet = sheet.worksheet('Subscription Table')
+payment_worksheet =  sheet.worksheet('Payment Table')
 
 app = Flask(__name__)
 
@@ -366,6 +367,46 @@ def edit_subscription(row_num):
 def delete_subscription(row_num):
     subscription_worksheet.update_acell(f'K{row_num}', '1')
     return redirect(url_for('subscriptions'))
+
+# ─── Payments ───────────────────────────────────────────────
+
+@app.route('/payments')
+def payments():
+    all_values = payment_worksheet.get_all_values()
+    headers = all_values[0]
+    rows = []
+    for i, row in enumerate(all_values[1:], start=2):
+        rows.append({'data': row, 'sheet_row': i})
+
+    member_data = member_worksheet.get_all_values()
+    member_names = {}
+    for r in member_data[1:]:
+        if r[1]:
+            member_names[r[1]] = r[2]
+
+    employee_data = employee_worksheet.get_all_values()
+    employee_names = {}
+    for r in employee_data[1:]:
+        if r[1]:
+            employee_names[r[1]] = r[2]
+
+    return render_template('payments.html', headers=headers, rows=rows, member_names=member_names, employee_names=employee_names)
+
+@app.route('/payments/add', methods=['GET', 'POST'])
+def add_payment():
+    if request.method == 'POST':
+        payment_amount = request.form.get('payment_amount')
+        payment_type = request.form.get('payment_type')
+        payment_mode = request.form.get('payment_mode')
+        payment_status = request.form.get('payment_status')
+        paid_by = request.form.get('paid_by')
+        recieved_by = request.form.get('recieved_by')
+        all_values = payment_worksheet.get_all_values()
+        next_row = len(all_values) + 1
+        row_data = ['=ROW()', f'="TXN_"&A{next_row}-1', datetime.now().strftime('%d-%b-%Y'), datetime.now().strftime('%I:%M:%S %p'), payment_amount, payment_type, payment_mode, payment_status, paid_by, recieved_by, '']
+        payment_worksheet.update([row_data], f'A{next_row}:K{next_row}', value_input_option='USER_ENTERED')
+        return redirect(url_for('payments'))
+    return render_template('add_payment.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

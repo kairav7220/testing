@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>{% block title %}Members · Library{% endblock %}</title>
+    <title>{% block title %}Payments · Library{% endblock %}</title>
 </head>
 
 <body>
@@ -19,22 +19,22 @@
         <header class="topbar">
             <div class="brand">
                 <span class="brand-mark" aria-hidden="true">
-                    <i class="fa-solid fa-user-group"></i>
+                    <i class="fa-solid fa-credit-card"></i>
                 </span>
                 <div>
                     <p class="eyebrow">Library Management</p>
-                    <h1>{% block heading %}Active members{% endblock %}</h1>
+                    <h1>{% block heading %}Payments{% endblock %}</h1>
                 </div>
             </div>
             <nav class="topnav">
                 <a href="{{ url_for('index') }}" class="btn btn-ghost btn-sm">Users</a>
                 <a href="{{ url_for('books') }}" class="btn btn-ghost btn-sm">Books</a>
-                <a href="{{ url_for('members') }}" class="btn btn-primary btn-sm">Members</a>
+                <a href="{{ url_for('members') }}" class="btn btn-ghost btn-sm">Members</a>
                 <a href="{{ url_for('employees') }}" class="btn btn-ghost btn-sm">Employees</a>
                 <a href="{{ url_for('book_category') }}" class="btn btn-ghost btn-sm">Book Categories</a>
                 <a href="{{ url_for('book_genre') }}" class="btn btn-ghost btn-sm">Book Genres</a>
                 <a href="{{ url_for('subscriptions') }}" class="btn btn-ghost btn-sm">Subscriptions</a>
-                <a href="{{ url_for('payments') }}" class="btn btn-ghost btn-sm">Payments</a>
+                <a href="{{ url_for('payments') }}" class="btn btn-primary btn-sm">Payments</a>
             </nav>
         </header>
 
@@ -42,61 +42,52 @@
         <main class="panel">
             <div class="panel-head">
                 <div>
-                    <h2><i class="fa-solid fa-table-list"></i> Members</h2>
+                    <h2><i class="fa-solid fa-table-list"></i> Payments</h2>
                 </div>
-                <a href="{{ url_for('add_member') }}" class="btn btn-primary">
+                <a href="{{ url_for('add_payment') }}" class="btn btn-primary">
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
 
+            <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>User ID</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Permanent Address</th>
-                        <th>Temporary Address</th>
+                        <th>Transaction ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                        <th>Mode</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Paid By</th>
+                        <th>Received By</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        <td data-label="Name">{{ row.data[2] }}</td>
-                        <td data-label="User ID">{{ row.data[3] }}</td>
-                        <td data-label="Email">{{ row.data[5] }}</td>
-                        <td data-label="Phone">{{ row.data[6] }}</td>
-                        <td data-label="Permanent Address">{{ row.data[8] }}</td>
-                        <td data-label="Temporary Address">{{ row.data[9] }}</td>
-                        <td data-label="Status">
-                            <span class="status active"><i class="fa-solid fa-check"></i> active</span>
-                        </td>
-                        <td data-label="Actions">
-                            <div class="row-actions">
-                                <a href="{{ url_for('edit_member', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
-                                    title="Edit">
-                                    <i class="fa-solid fa-pencil"></i>
-                                </a>
-                                <a href="{{ url_for('delete_member', row_num=row.sheet_row) }}" class="btn-icon delete-btn"
-                                    title="Delete" onclick="return confirm('Delete this member?')">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </a>
-                            </div>
-                        </td>
+                        <td data-label="Transaction ID">{{ row.data[1] }}</td>
+                        <td data-label="Date">{{ row.data[2] }}</td>
+                        <td data-label="Time">{{ row.data[3] }}</td>
+                        <td data-label="Amount">{{ row.data[4] }}</td>
+                        <td data-label="Type">{{ row.data[5] }}</td>
+                        <td data-label="Mode">{{ row.data[6] }}</td>
+                        <td data-label="Status">{{ row.data[7] }}</td>
+                        <td data-label="Paid By">{{ member_names.get(row.data[8], row.data[8]) }}</td>
+                        <td data-label="Received By">{{ employee_names.get(row.data[9], row.data[9]) }}</td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="8" class="empty-state">
+                        <td colspan="9" class="empty-state">
                             <i class="fa-solid fa-inbox"></i>
-                            <p>No active members found.</p>
+                            <p>No payments found.</p>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            </div>
         </main>
         {% endblock %}
     </div>
