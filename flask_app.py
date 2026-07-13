@@ -29,6 +29,7 @@ employee_worksheet = sheet.worksheet('Employee Table')
 subscription_worksheet = sheet.worksheet('Subscription Table')
 payment_worksheet =  sheet.worksheet('Payment Table')
 book_sell_worksheet = sheet.worksheet('Book Sell')
+book_issue_worksheet = sheet.worksheet('Book Issue')
 
 app = Flask(__name__)
 
@@ -454,6 +455,55 @@ def edit_book_sell(row_num):
 
     sell_row = book_sell_worksheet.get(f'A{row_num}:H{row_num}')[0]
     return render_template('edit_book_sell.html', sell=sell_row, row_num=row_num)
+
+# ─── Book Issues ───────────────────────────────────────────────
+
+@app.route('/book_issue')
+def book_issue():
+    all_values = book_issue_worksheet.get_all_values()
+    headers = all_values[0]
+    rows = []
+    for i, row in enumerate(all_values[1:], start=2):
+        rows.append({'data': row, 'sheet_row': i})
+
+    member_data = member_worksheet.get_all_values()
+    member_names = {}
+    for r in member_data[1:]:
+        if r[1]:
+            member_names[r[1]] = r[2]
+
+    employee_data = employee_worksheet.get_all_values()
+    employee_names = {}
+    for r in employee_data[1:]:
+        if r[1]:
+            employee_names[r[1]] = r[2]
+
+    return render_template('book_issue.html', headers=headers, rows=rows, member_names=member_names, employee_names=employee_names)
+
+@app.route('/book_issue/add', methods=['GET', 'POST'])
+def add_book_issue():
+    if request.method == 'POST':
+        transaction_id = request.form.get('transaction_id')
+        transaction_date = request.form.get('transaction_date')
+        book_id = request.form.get('book_id')
+        issued_date = request.form.get('issued_date')
+        issued_to = request.form.get('issued_to')
+        all_values = book_issue_worksheet.get_all_values()
+        next_row = len(all_values) + 1
+        row_data = ['=ROW()', transaction_id, transaction_date, datetime.now().strftime('%d-%m-%Y %I:%M:%S %p'), book_id, issued_date, issued_to, '', '']
+        book_issue_worksheet.update([row_data], f'A{next_row}:I{next_row}', value_input_option='USER_ENTERED')
+        return redirect(url_for('book_issue'))
+    return render_template('add_book_issue.html')
+
+@app.route('/book_issue/return/<int:row_num>', methods=['GET', 'POST'])
+def return_book_issue(row_num):
+    if request.method == 'POST':
+        book_issue_worksheet.update_acell(f'H{row_num}', request.form.get('received_by'))
+        book_issue_worksheet.update_acell(f'I{row_num}', request.form.get('returned_date'))
+        return redirect(url_for('book_issue'))
+
+    issue_row = book_issue_worksheet.get(f'A{row_num}:I{row_num}')[0]
+    return render_template('return_book_issue.html', issue=issue_row, row_num=row_num)
 
 if __name__ == '__main__':
     app.run(debug=True)

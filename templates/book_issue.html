@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>{% block title %}Books · Library{% endblock %}</title>
+    <title>{% block title %}Book Issues · Library{% endblock %}</title>
 </head>
 
 <body>
@@ -19,21 +19,21 @@
         <header class="topbar">
             <div class="brand">
                 <span class="brand-mark" aria-hidden="true">
-                    <i class="fa-solid fa-book"></i>
+                    <i class="fa-solid fa-book-reader"></i>
                 </span>
                 <div>
                     <p class="eyebrow">Library Management</p>
-                    <h1>{% block heading %}Books{% endblock %}</h1>
+                    <h1>{% block heading %}Book issues{% endblock %}</h1>
                 </div>
             </div>
             <nav class="topnav">
                 <a href="{{ url_for('index') }}" class="btn btn-ghost btn-sm">Users</a>
-                <a href="{{ url_for('books') }}" class="btn btn-primary btn-sm">Books</a>
+                <a href="{{ url_for('books') }}" class="btn btn-ghost btn-sm">Books</a>
                 <a href="{{ url_for('members') }}" class="btn btn-ghost btn-sm">Members</a>
                 <a href="{{ url_for('employees') }}" class="btn btn-ghost btn-sm">Employees</a>
                 <a href="{{ url_for('book_category') }}" class="btn btn-ghost btn-sm">Book Categories</a>
                 <a href="{{ url_for('book_genre') }}" class="btn btn-ghost btn-sm">Book Genres</a>
-                <a href="{{ url_for('book_issue') }}" class="btn btn-ghost btn-sm">Book Issues</a>
+                <a href="{{ url_for('book_issue') }}" class="btn btn-primary btn-sm">Book Issues</a>
                 <a href="{{ url_for('subscriptions') }}" class="btn btn-ghost btn-sm">Subscriptions</a>
                 <a href="{{ url_for('book_sell') }}" class="btn btn-ghost btn-sm">Book Sells</a>
                 <a href="{{ url_for('payments') }}" class="btn btn-ghost btn-sm">Payments</a>
@@ -44,43 +44,47 @@
         <main class="panel">
             <div class="panel-head">
                 <div>
-                    <h2><i class="fa-solid fa-table-list"></i> Books</h2>
+                    <h2><i class="fa-solid fa-table-list"></i> Book Issues</h2>
                 </div>
-                <a href="{{ url_for('add_book') }}" class="btn btn-primary">
+                <a href="{{ url_for('add_book_issue') }}" class="btn btn-primary">
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
 
+            <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        {% for h in headers[2:9] %}
-                        <th>{{ h }}</th>
-                        {% endfor %}
-                        <th>Status</th>
+                        <th>Transaction ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Book ID</th>
+                        <th>Issued Date</th>
+                        <th>Issued To</th>
+                        <th>Received By</th>
+                        <th>Returned Date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        {% for cell in row.data[2:9] %}
-                        <td data-label="{{ headers[loop.index0 + 2] }}">{{ cell }}</td>
-                        {% endfor %}
-                        <td data-label="Status">
-                            <span class="status active"><i class="fa-solid fa-check"></i> active</span>
-                        </td>
+                        <td data-label="Transaction ID">{{ row.data[1] }}</td>
+                        <td data-label="Date">{{ row.data[2] }}</td>
+                        <td data-label="Time">{{ row.data[3] }}</td>
+                        <td data-label="Book ID">{{ row.data[4] }}</td>
+                        <td data-label="Issued Date">{{ row.data[5] }}</td>
+                        <td data-label="Issued To">{{ member_names.get(row.data[6], row.data[6]) }}</td>
+                        <td data-label="Received By">{{ employee_names.get(row.data[7], row.data[7]) }}</td>
+                        <td data-label="Returned Date">{{ row.data[8] }}</td>
                         <td data-label="Actions">
                             <div class="row-actions">
-                                <a href="{{ url_for('edit_book', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
-                                    title="Edit">
-                                    <i class="fa-solid fa-pencil"></i>
+                                {% if not row.data[8] %}
+                                <a href="{{ url_for('return_book_issue', row_num=row.sheet_row) }}" class="btn-icon edit-btn"
+                                    title="Return">
+                                    <i class="fa-solid fa-rotate-left"></i>
                                 </a>
-                                <a href="{{ url_for('delete_book', row_num=row.sheet_row) }}"
-                                    class="btn-icon delete-btn" title="Delete"
-                                    onclick="return confirm('Delete this book?')">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </a>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>
@@ -88,12 +92,13 @@
                     <tr>
                         <td colspan="9" class="empty-state">
                             <i class="fa-solid fa-inbox"></i>
-                            <p>No active books found.</p>
+                            <p>No book issues found.</p>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            </div>
         </main>
         {% endblock %}
     </div>

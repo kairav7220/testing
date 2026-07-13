@@ -1,0 +1,64 @@
+{% extends "book_issue.html" %}
+
+{% block title %}Add Book Issue · Library{% endblock %}
+{% block heading %}Add book issue{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-plus"></i> Issue book</h2>
+        </div>
+        <a href="{{ url_for('book_issue') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('add_book_issue') }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="transaction_id">
+                    <i class="fa-solid fa-hashtag"></i> Transaction ID
+                </label>
+                <input id="transaction_id" type="text" name="transaction_id" placeholder="e.g. TXN_1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="transaction_date">
+                    <i class="fa-solid fa-calendar"></i> Transaction date
+                </label>
+                <input id="transaction_date" type="text" name="transaction_date" placeholder="e.g. 25-Jan-2026" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="book_id">
+                    <i class="fa-solid fa-book"></i> Book ID
+                </label>
+                <input id="book_id" type="text" name="book_id" placeholder="e.g. BOOK_1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="issued_date">
+                    <i class="fa-solid fa-calendar-check"></i> Issued date
+                </label>
+                <input id="issued_date" type="text" name="issued_date" placeholder="e.g. 25-Jan-2026" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="issued_to">
+                <i class="fa-solid fa-user"></i> Issued to (Member ID)
+            </label>
+            <input id="issued_to" type="text" name="issued_to" placeholder="e.g. MEM_1" required>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('book_issue') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Issue</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

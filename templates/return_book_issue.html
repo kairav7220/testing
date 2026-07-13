@@ -1,0 +1,41 @@
+{% extends "book_issue.html" %}
+
+{% block title %}Return Book · Library{% endblock %}
+{% block heading %}Return book{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-rotate-left"></i> Return book</h2>
+        </div>
+        <a href="{{ url_for('book_issue') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('return_book_issue', row_num=row_num) }}">
+        <div class="form-group">
+            <label for="received_by">
+                <i class="fa-solid fa-user-tie"></i> Received by (Employee ID)
+            </label>
+            <input id="received_by" type="text" name="received_by" placeholder="e.g. EMP_1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="returned_date">
+                <i class="fa-solid fa-calendar-check"></i> Returned date
+            </label>
+            <input id="returned_date" type="text" name="returned_date" placeholder="e.g. 26-Feb-2026" required>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('book_issue') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-check"></i> Confirm return
+            </button>
+        </div>
+    </form>
+</main>
+{% endblock %}
