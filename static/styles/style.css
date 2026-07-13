@@ -99,6 +99,10 @@ tbody tr:hover { background: #f5f7fa; }
 }
 .btn-toggle:hover { color: #5b8def; background: #eaf1fd; }
 .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 6px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.topnav { display: flex; gap: 8px; }
+.btn-sm { padding: 7px 14px; font-size: 0.82rem; }
 
 .danger-zone {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -112,6 +116,7 @@ tbody tr:hover { background: #f5f7fa; }
     tbody td { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid #e8ecf1; }
     tbody td::before { content: attr(data-label); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #aab4c2; }
     .topbar, .danger-zone { flex-direction: column; align-items: flex-start; }
+    .form-row { grid-template-columns: 1fr; }
     .summary-card { flex-direction: column; text-align: center; }
     .summary-meta { justify-content: center; }
 }

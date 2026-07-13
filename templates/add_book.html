@@ -1,0 +1,78 @@
+{% extends "books.html" %}
+
+{% block title %}Add Book · Library{% endblock %}
+{% block heading %}Add book{% endblock %}
+
+{% block content %}
+<main class="panel">
+    <div class="panel-head">
+        <div>
+            <h2><i class="fa-solid fa-book-circle-plus"></i> Add book</h2>
+        </div>
+        <a href="{{ url_for('books') }}" class="btn btn-ghost">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <form class="edit-form" method="POST" action="{{ url_for('add_book') }}">
+        <div class="form-group">
+            <label for="book_name">
+                <i class="fa-solid fa-book"></i> Book name
+            </label>
+            <input id="book_name" type="text" name="book_name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="book_author">
+                <i class="fa-solid fa-pen"></i> Author
+            </label>
+            <input id="book_author" type="text" name="book_author" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="book_price">
+                    <i class="fa-solid fa-dollar-sign"></i> Price
+                </label>
+                <input id="book_price" type="number" step="0.01" name="book_price" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edition">
+                    <i class="fa-solid fa-layer-group"></i> Edition
+                </label>
+                <input id="edition" type="number" name="edition" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="book_cat">
+                    <i class="fa-solid fa-tag"></i> Category
+                </label>
+                <input id="book_cat" type="text" name="book_cat" required>
+            </div>
+
+            <div class="form-group">
+                <label for="book_genre">
+                    <i class="fa-solid fa-masks-theater"></i> Genre
+                </label>
+                <input id="book_genre" type="text" name="book_genre" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="publication">
+                <i class="fa-solid fa-calendar"></i> Publication year
+            </label>
+            <input id="publication" type="number" name="publication" required>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('books') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</main>
+{% endblock %}
